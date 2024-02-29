@@ -8,25 +8,86 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-
 import 'package:rpn_calculator/main.dart';
+
+extension TesterExtensions on WidgetTester {
+  Future<void> enterDigits(String digits) async {
+    for (var digit in digits.characters) {
+      await tapByKey(Key(digit));
+    }
+  }
+  Future<void> tapByKey(Key key) async {
+    await tap(find.byKey(key));
+    await pump();
+  }
+}
+extension FinderExtensions on CommonFinders {
+  String? displayText() {
+    final text = byKey(const Key("Display")).evaluate().single.widget as Text;
+    return text.data;
+  }
+}
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const CalculatorApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Enter a number', (tester) async {
+    await tester.pumpWidget(CalculatorApp());
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    expect(find.displayText(), equals(''));
+    await tester.enterDigits('123');
+    expect(find.displayText(), equals('123'));
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('Add two numbers', (tester) async {
+    await tester.pumpWidget(CalculatorApp());
+
+    expect(find.displayText(), equals(''));
+    await tester.enterDigits('123');
+    await tester.tapByKey(const Key('+'));
+    await tester.enterDigits('456');
+    await tester.tapByKey(const Key('='));
+    expect(find.displayText(), equals('579'));
+  });
+  testWidgets('Subtract two numbers for negative number', (tester) async {
+    await tester.pumpWidget(CalculatorApp());
+
+    expect(find.displayText(), equals(''));
+    await tester.enterDigits('123');
+    await tester.tapByKey(const Key('-'));
+    await tester.enterDigits('456');
+    await tester.tapByKey(const Key('='));
+    expect(find.displayText(), equals('-333'));
+  });
+  testWidgets('Subtract two numbers', (tester) async {
+    await tester.pumpWidget(CalculatorApp());
+
+    expect(find.displayText(), equals(''));
+    await tester.enterDigits('666');
+    await tester.tapByKey(const Key('-'));
+    await tester.enterDigits('333');
+    await tester.tapByKey(const Key('='));
+    expect(find.displayText(), equals('333'));
+  });
+
+  testWidgets('Multiply two numbers', (tester) async {
+    await tester.pumpWidget(CalculatorApp());
+
+    expect(find.displayText(), equals(''));
+    await tester.enterDigits('70');
+    await tester.tapByKey(const Key('*'));
+    await tester.enterDigits('10');
+    await tester.tapByKey(const Key('='));
+    expect(find.displayText(), equals('700'));
+  });
+  testWidgets('Divide two numbers', (tester) async {
+    await tester.pumpWidget(CalculatorApp());
+
+    expect(find.displayText(), equals(''));
+    await tester.enterDigits('666');
+    await tester.tapByKey(const Key('/'));
+    await tester.enterDigits('333');
+    await tester.tapByKey(const Key('='));
+    expect(find.displayText(), equals('111'));
   });
 }

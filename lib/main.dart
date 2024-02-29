@@ -29,104 +29,133 @@ class CalculatorHomePage extends StatefulWidget {
 class _CalculatorHomePageState extends State<CalculatorHomePage> {
   String output = '0';
   String sequence = '';
-  final List<String> digitButtons = [
-    '7',
-    '8',
-    '9',
-    '4',
-    '5',
-    '6',
-    '1',
-    '2',
-    '3',
-    '0'
-  ];
+  String temp = '';
+  final List<String> digitButtons = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0'];
   final List<String> operatorButtons = ['+', '-', '*', '/', '=', 'C'];
+
+  double buttonHeight = 100.0;
+  double buttonWidth = 100.0;
 
 // Create an instance of the Calculator class
   final Calculator calculator = Calculator([]);
 
   Widget buildNumberButtons(String digit) {
     return Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            calculator.push(int.parse(digit));
-            // Update the sequence string
-            sequence += digit;
-            // Update the output string
-            output = sequence;
-          });
-        },
-        child: Text(
-          digit,
-          style: TextStyle(fontSize: 20), // Customize button text style
+      child: Container(
+        height: buttonHeight, // Specify your height
+        width: buttonWidth, // Specify your width
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.purple, // background
+            onPrimary: Colors.white, // foreground
+            padding: EdgeInsets.all(5.0), // Set button padding
+            shape: CircleBorder(
+              side: BorderSide(
+                color: Colors.black, // Set border color
+                width: 0.5, // Set border width
+              ),
+            ),
+
+          ),
+          onPressed: () {
+            setState(() {
+              temp += digit;
+              // Update the sequence string
+              sequence += digit;
+              // Update the output string
+              output = sequence;
+            });
+          },
+          child: Text(
+            digit,
+            style: TextStyle(fontSize: 30), // Customize button text style
+          ),
         ),
       ),
     );
   }
 
+
+
   Widget buildOperatorButton(String operator) {
     return Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            // Execute the corresponding command
-            switch (operator) {
-              case '+':
-                sequence += ' + ';
-                break;
-              case '-':
-                sequence += ' - ';
-                break;
-              case '*':
-                sequence += ' * ';
-                break;
-              case '/':
-                sequence += ' / ';
-                break;
-              case 'C':
-                calculator.stack.clear();
-                sequence = '';
-                output = '0';
-                break;
-              case '=':
-              // Display the result
-                if (calculator.stack.isNotEmpty) {
-                  if(sequence.contains('*')){
-                    calculator.execute(Multiplication());
-                  } else if(sequence.contains('/')){
-                    calculator.execute(Division());
-                  } else if(sequence.contains('+')){
-                    calculator.execute(Addition());
-                  } else if(sequence.contains('-')){
-                    calculator.execute(Subtraction());
+      child: Container(
+        height: buttonHeight, // Specify your height
+        width: buttonWidth, // Specify your width
+        child: ElevatedButton(
+          onPressed: () {
+            setState(() {
+              // Execute the corresponding command
+              switch (operator) {
+                case '+':
+                  sequence += ' + ';
+                  calculator.push(int.parse(temp));
+                  temp = '';
+                  break;
+                case '-':
+                  sequence += ' - ';
+                  calculator.push(int.parse(temp));
+                  temp = '';
+                  break;
+                case '*':
+                  sequence += ' * ';
+                  calculator.push(int.parse(temp));
+                  temp = '';
+                  break;
+                case '/':
+                  sequence += ' / ';
+                  calculator.push(int.parse(temp));
+                  temp = '';
+                  break;
+                case 'C':
+                  calculator.stack.clear();
+                  sequence = '';
+                  output = '0';
+                  temp = '';
+                  break;
+                case '=':
+                // Display the result
+                  calculator.push(int.parse(temp));
+                  temp = '';
+                  if (calculator.stack.isNotEmpty) {
+                    if(sequence.contains('*')){
+                      calculator.execute(Multiplication());
+                    } else if(sequence.contains('/')){
+                      calculator.execute(Division());
+                    } else if(sequence.contains('+')){
+                      calculator.execute(Addition());
+                    } else if(sequence.contains('-')){
+                      calculator.execute(Subtraction());
+                    }
+                    sequence += ' = ' + calculator.stack.last.toString();
+                    output = sequence;
                   }
-                  sequence += ' = ' + calculator.stack.last.toString();
-                  output = sequence;
-                }
-                break;
-            }
-            // Update the output string
-            output = sequence;
-          });
-        },
-        child: Text(
-          operator,
-          style: TextStyle(fontSize: 20),
+                  break;
+              }
+              // Update the output string
+              output = sequence;
+            });
+          },
+          child: Text(
+            operator,
+            style: TextStyle(fontSize: 30),
+          ),
         ),
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.end, // Add this line
         children: [
           SafeArea(
             child: Text(
+              key: Key("Display"),
               output,
               style: TextStyle(fontSize: 24),
             ),

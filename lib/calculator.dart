@@ -21,27 +21,35 @@ class Calculator {
 class Addition implements Command {
   @override
   void apply(List<num> stack) {
-    stack.add(stack.removeLast() + stack.removeLast());
+    num x = stack.removeLast();
+    num y = stack.removeLast();
+    stack.add(y + x);
   }
 }
 
 class Subtraction implements Command {
   @override
   void apply(List<num> stack) {
-    stack.add(stack.removeLast() - stack.removeLast());
+     num x = stack.removeLast();
+     num y = stack.removeLast();
+    stack.add(y - x);
   }
 }
 
 class Multiplication implements Command {
   @override
   void apply(List<num> stack) {
-    stack.add(stack.removeLast() * stack.removeLast());
+    num x = stack.removeLast();
+    num y = stack.removeLast();
+    stack.add(y * x);
   }
 }
 
 class Division implements Command {
   @override
   void apply(List<num> stack) {
-    stack.add(stack.removeLast() / stack.removeLast());
+    num x = stack.removeLast();
+    num y = stack.removeLast();
+    stack.add(y / x);
   }
 }
