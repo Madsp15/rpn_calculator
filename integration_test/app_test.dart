@@ -1,9 +1,3 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,59 +29,59 @@ void main() {
     await tester.pumpWidget(CalculatorApp());
 
     expect(find.displayText(), equals(''));
-    await tester.enterDigits('123');
-    expect(find.displayText(), equals('123'));
+    await tester.enterDigits('1');
+    expect(find.displayText(), equals('1'));
   });
 
   testWidgets('Add two numbers', (tester) async {
     await tester.pumpWidget(CalculatorApp());
 
     expect(find.displayText(), equals(''));
-    await tester.enterDigits('123');
+    await tester.enterDigits('1');
     await tester.tapByKey(const Key('+'));
-    await tester.enterDigits('456');
+    await tester.enterDigits('2');
     await tester.tapByKey(const Key('='));
-    expect(find.displayText(), equals('579'));
+    expect(find.displayText(), equals('1 + 2 = 3'));
   });
   testWidgets('Subtract two numbers for negative number', (tester) async {
     await tester.pumpWidget(CalculatorApp());
 
     expect(find.displayText(), equals(''));
-    await tester.enterDigits('123');
+    await tester.enterDigits('6');
     await tester.tapByKey(const Key('-'));
-    await tester.enterDigits('456');
+    await tester.enterDigits('3');
     await tester.tapByKey(const Key('='));
-    expect(find.displayText(), equals('-333'));
+    expect(find.displayText(), equals('6 - 3 = 3'));
   });
   testWidgets('Subtract two numbers', (tester) async {
     await tester.pumpWidget(CalculatorApp());
 
     expect(find.displayText(), equals(''));
-    await tester.enterDigits('666');
+    await tester.enterDigits('6');
     await tester.tapByKey(const Key('-'));
-    await tester.enterDigits('333');
+    await tester.enterDigits('3');
     await tester.tapByKey(const Key('='));
-    expect(find.displayText(), equals('333'));
+    expect(find.displayText(), equals('6 - 3 = 3'));
   });
 
   testWidgets('Multiply two numbers', (tester) async {
     await tester.pumpWidget(CalculatorApp());
 
     expect(find.displayText(), equals(''));
-    await tester.enterDigits('70');
+    await tester.enterDigits('7');
     await tester.tapByKey(const Key('*'));
-    await tester.enterDigits('10');
+    await tester.enterDigits('2');
     await tester.tapByKey(const Key('='));
-    expect(find.displayText(), equals('700'));
+    expect(find.displayText(), equals('7 * 2 = 14'));
   });
   testWidgets('Divide two numbers', (tester) async {
     await tester.pumpWidget(CalculatorApp());
 
     expect(find.displayText(), equals(''));
-    await tester.enterDigits('666');
+    await tester.enterDigits('6');
     await tester.tapByKey(const Key('/'));
-    await tester.enterDigits('333');
+    await tester.enterDigits('3');
     await tester.tapByKey(const Key('='));
-    expect(find.displayText(), equals('111'));
+    expect(find.displayText(), equals('6 / 3 = 2.0'));
   });
 }

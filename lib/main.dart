@@ -27,7 +27,7 @@ class CalculatorHomePage extends StatefulWidget {
 }
 
 class _CalculatorHomePageState extends State<CalculatorHomePage> {
-  String output = '0';
+  String output = '';
   String sequence = '';
   String temp = '';
   final List<String> digitButtons = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0'];
@@ -67,6 +67,7 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
             });
           },
           child: Text(
+            key: Key(digit.toString()),
             digit,
             style: TextStyle(fontSize: 30), // Customize button text style
           ),
@@ -137,6 +138,7 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
             });
           },
           child: Text(
+            key: Key(operator.toString()),
             operator,
             style: TextStyle(fontSize: 30),
           ),
