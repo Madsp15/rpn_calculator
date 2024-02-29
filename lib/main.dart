@@ -46,8 +46,8 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
         width: buttonWidth, // Specify your width
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Colors.purple, // background
-            onPrimary: Colors.white, // foreground
+            backgroundColor: Colors.purple, // background
+            foregroundColor: Colors.white, // foreground
             padding: EdgeInsets.all(5.0), // Set button padding
             shape: CircleBorder(
               side: BorderSide(
